@@ -1,0 +1,25 @@
+{% extends "./base.html" %}
+
+{% block title %}
+
+recipes
+
+{% endblock %}
+
+{% block body %}
+<div>
+    {% if recipes %}
+    <ul>
+        {% for recipe in recipes %}
+        <li>
+            <p>Название: {{ recipe.name }}</p>
+            <p>Описание: {{ recipe.description }}</p>
+            <p>Автор: {{ recipe.author__name }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <span>No data here yet.</span>
+    {% endif %}
+</div>
+{% endblock %}
