@@ -1,0 +1,33 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyInterpreterInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="3">
+            <item index="0" class="java.lang.String" itemvalue="psycopg2" />
+            <item index="1" class="java.lang.String" itemvalue="email_validator" />
+            <item index="2" class="java.lang.String" itemvalue="SQLAlchemy" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyTypeCheckerInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="range.random" />
+          <option value="types.MappingProxyType.__setitem__" />
+          <option value="general.views" />
+          <option value="general.urls.index" />
+          <option value="general.urls.about" />
+          <option value="general.models.Article.objects" />
+          <option value="controller.Controller" />
+          <option value="_collections_abc.dict_items.__getitem__" />
+          <option value="hm_py.tenth_hm.cross_and_zeroes.Board.__getitem__" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
