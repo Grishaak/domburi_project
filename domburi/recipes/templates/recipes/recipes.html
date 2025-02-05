@@ -12,10 +12,19 @@ recipes
     <ul>
         {% for recipe in recipes %}
         <li>
+            {% if recipe.categories %}
+            <p>
+                Категории:
+                {% for category in recipe.categories.all %}
+                    {{ category.name }}
+                {% endfor %}
+            </p>
+            {% endif %}
             <p>Название: {{ recipe.name }}</p>
             <p>Описание: {{ recipe.description }}</p>
-            <p>Автор: {{ recipe.author__name }}</p>
+            <p>Автор: {{ recipe.author }}</p>
         </li>
+        <br>
         {% endfor %}
     </ul>
     {% else %}

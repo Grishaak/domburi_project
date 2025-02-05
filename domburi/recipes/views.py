@@ -11,6 +11,6 @@ def index(request):
 def get_recipes(request):
     context = {
         'recipes':
-            Recipe.objects.all()
+            Recipe.objects.select_related('author').prefetch_related('categories').all()
     }
     return render(request, template_name='recipes/recipes.html', context=context)
