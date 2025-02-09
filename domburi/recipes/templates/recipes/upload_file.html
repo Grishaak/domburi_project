@@ -1,0 +1,27 @@
+{% extends "./base.html" %}
+
+{% block title %}
+upload file
+{% endblock %}
+
+{% block body %}
+
+<h2>Upload your file here!</h2>
+<div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label for="file"></label>
+            <input type="file" name="myfile" id="file">
+        </p>
+        <button type="submit">
+            Submit
+        </button>
+    </form>
+    {% if myfile.size > 1000000 and request.POST.myfile %}
+    <p>
+        Okay {{ myfile.size }}
+    </p>
+    {% endif %}
+</div>
+{% endblock %}

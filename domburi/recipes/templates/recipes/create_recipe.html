@@ -1,0 +1,24 @@
+{% extends "./base.html" %}
+
+{% block title %}
+Recipe form
+{% endblock %}
+
+{% block body %}
+<div>
+    <a href="{% url 'recipes:recipes_list' %}">
+        Go to recipes list.
+    </a>
+</div>
+<h1>Recipe form</h1>
+
+<div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">
+            Submit
+        </button>
+    </form>
+</div>
+{% endblock %}

@@ -2,20 +2,19 @@
 
 {% block title %}
 
-Recipes list
+Detailed recipe.
 
 {% endblock %}
 
 {% block body %}
 <div>
-    <a href="{% url 'recipes:create_recipe' %}">
+    <a href="{% url 'recipes:recipes_list' %}">
         Create new recipe.
     </a>
 </div>
 <div>
-    {% if recipes %}
+    {% if recipe %}
     <ul>
-        {% for recipe in recipes %}
         <li>
             {% if recipe.categories %}
             <p>
@@ -30,7 +29,6 @@ Recipes list
             <p>Автор: {{ recipe.author }}</p>
         </li>
         <br>
-        {% endfor %}
     </ul>
     {% else %}
     <span>No data here yet.</span>
