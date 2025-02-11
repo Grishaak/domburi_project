@@ -7,9 +7,52 @@
         Base
         {% endblock %}
     </title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-size: 20 px;
+        }
+
+        .h-1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+        .h-1 > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+    </style>
 </head>
 <body>
+<div class="h-1">
+    <div>
+        <a href="{% url 'recipes:index' %}">Home</a>
+        <a href="{% url 'recipes:recipes_list' %}">All recipes.</a>
+    </div>
+    {% if user.is_authenticated %}
+    <div>
+        <p>Username: {{ user.username }} </p>
+        <a href="{% url 'recipes:create_recipe' %}">Create recipe</a>
+        <a href="{% url 'authentication:about_me' %}">About me</a>
+        <a href="{% url 'authentication:profile' %}">Redact profile</a>
+        <a href="{% url 'authentication:logout' %}">Log out</a>
+    </div>
+    {% else %}
+    <div>
+        <a href="{% url 'authentication:login' %}">Log in</a>
+        <a href="{% url 'authentication:register' %}">Register</a>
+    </div>
+    {% endif %}
+
+</div>
 {% block body %}
+
 {% endblock %}
 </body>
 </html>

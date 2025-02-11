@@ -1,0 +1,25 @@
+{% extends "recipes/base.html" %}
+{% block title %}
+About Me
+{% endblock %}
+
+
+{% block body %}
+<h1>About me</h1>
+
+<div>
+    {% if user.is_authenticated %}
+    <div>
+        <p>Username: {{ user.username }}</p>
+        <p>Email address: {{ user.email }}</p>
+        <p>First name: {{ user.first_name }}</p>
+        <p>Last name: {{ user.last_name }}</p>
+    </div>
+    {% else %}
+    <div>
+        <p>Sorry, but you need to log in to proceed on this page.</p>
+        <a href="{% url 'authentication:login' %}"><p>Click here to log in.</p></a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

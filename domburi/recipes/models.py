@@ -12,6 +12,9 @@ class Recipe(models.Model):
     author = ForeignKey(User, on_delete=models.CASCADE, related_name='recipe')
     categories = ManyToManyField("Category", related_name='recipes')
 
+    class Meta:
+        ordering = ['pk']
+
     def __str__(self):
         return f'Рецепт: {self.name}.'
 

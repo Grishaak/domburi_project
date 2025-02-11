@@ -8,9 +8,6 @@ Detailed recipe.
 
 {% block body %}
 <div>
-    <a href="{% url 'recipes:recipes_list' %}">
-        Create new recipe.
-    </a>
 </div>
 <div>
     {% if recipe %}
@@ -20,7 +17,7 @@ Detailed recipe.
             <p>
                 Категории:
                 {% for category in recipe.categories.all %}
-                    {{ category.name }}
+                {{ category.name }}
                 {% endfor %}
             </p>
             {% endif %}

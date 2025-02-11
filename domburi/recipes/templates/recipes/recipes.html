@@ -8,9 +8,6 @@ Recipes list
 
 {% block body %}
 <div>
-    <a href="{% url 'recipes:create_recipe' %}">
-        Create new recipe.
-    </a>
 </div>
 <div>
     {% if recipes %}
@@ -21,11 +18,13 @@ Recipes list
             <p>
                 Категории:
                 {% for category in recipe.categories.all %}
-                    {{ category.name }}
+                {{ category.name }}
                 {% endfor %}
             </p>
             {% endif %}
-            <p>Название: {{ recipe.name }}</p>
+            <p><a href="{% url 'recipes:recipe_detail' recipe.pk %}">
+                Название: {{ recipe.name }}</a></p>
+            <p>Id: {{ recipe.pk }}</p>
             <p>Описание: {{ recipe.description }}</p>
             <p>Автор: {{ recipe.author }}</p>
         </li>
