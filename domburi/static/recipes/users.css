@@ -1,0 +1,15 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-size: 22px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.h1-prof, .forms > div, p {
+    justify-content: center space-between;
+    align-items: center;
+    max-width: 1200px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}

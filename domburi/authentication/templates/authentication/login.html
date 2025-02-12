@@ -6,8 +6,9 @@ Login
 
 
 {% block body %}
+<h1 class="h1-prof">Логин</h1>
 
-<form method="post">
+<form class="forms" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <div>

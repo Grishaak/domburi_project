@@ -1,56 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" charset="UTF-8"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>
         {% block title %}
         Base
         {% endblock %}
     </title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-size: 20 px;
-        }
-
-        .h-1 {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-        }
-        .h-1 > div {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'recipes/recipes.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'recipes/users.css' %}"/>
 </head>
 <body>
-<div class="h-1">
-    <div>
-        <a href="{% url 'recipes:index' %}">Home</a>
-        <a href="{% url 'recipes:recipes_list' %}">All recipes.</a>
+<header>
+    <div class="h-1">
+        <div class="h-2">
+            <a href="{% url 'recipes:index' %}">Главная</a>
+            <a href="{% url 'recipes:recipes_list' %}">Все рецепты</a>
+            <a href="{% url 'recipes:category_list' %}">Все категории</a>
+            <a href="{% url 'recipes:recipe_create' %}">Создать рецепт</a>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="h-2">
+            {% if user %}
+            <span class="user_decor">{{ user.username }}</span>
+            {% endif %}
+            <a href="{% url 'authentication:about_me' %}">Обо мне</a>
+            <a href="{% url 'authentication:profile' %}">Редактировать профиль</a>
+            <a href="{% url 'authentication:logout' %}">Выйти</a>
+        </div>
+        {% else %}
+        <div class="h-2">
+            <a href="{% url 'authentication:login' %}">Войти</a>
+            <a href="{% url 'authentication:register' %}">Зарегистрироваться</a>
+        </div>
+        {% endif %}
     </div>
-    {% if user.is_authenticated %}
-    <div>
-        <p>Username: {{ user.username }} </p>
-        <a href="{% url 'recipes:create_recipe' %}">Create recipe</a>
-        <a href="{% url 'authentication:about_me' %}">About me</a>
-        <a href="{% url 'authentication:profile' %}">Redact profile</a>
-        <a href="{% url 'authentication:logout' %}">Log out</a>
-    </div>
-    {% else %}
-    <div>
-        <a href="{% url 'authentication:login' %}">Log in</a>
-        <a href="{% url 'authentication:register' %}">Register</a>
-    </div>
-    {% endif %}
-
-</div>
+</header>
 {% block body %}
 
 {% endblock %}

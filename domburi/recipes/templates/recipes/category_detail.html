@@ -1,0 +1,18 @@
+{% extends "./base.html" %}
+
+{% block title %}
+
+Detailed recipe.
+
+{% endblock %}
+
+{% block body %}
+<div class="cat-detail">
+    {% if category %}
+        <p>Название: {{ category.name }}</p>
+        <p>Описание: {{ category.description }}</p>
+        {% else %}
+        <span>No data here yet.</span>
+    {% endif %}
+</div>
+{% endblock %}

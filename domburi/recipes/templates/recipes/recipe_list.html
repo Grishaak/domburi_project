@@ -1,0 +1,36 @@
+{% extends "./base.html" %}
+
+{% block title %}
+
+Recipes list
+
+{% endblock %}
+
+{% block body %}
+<section class="h-3">
+    {% if recipes %}
+    {% for recipe in recipes %}
+    <div class="content_inner">
+        {% if recipe.categories %}
+        <p>
+            {% for category in recipe.categories.all %}
+            <span class="cats">{{ category.name }}</span>
+            {% endfor %}
+        </p>
+
+        {% endif %}
+        <p><a href="{% url 'recipes:recipe_detail' recipe.pk %}">
+            Название: {{ recipe.name }}</a></p>
+
+        {% if recipe.image %}
+        <img src="{{ recipe.image.url }}" alt="No image here yet.">
+        {% endif %}
+        <p>Описание: {{ recipe.description|truncatewords:70|linebreaks }}</p>
+        <p>Автор: {{ recipe.author }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <span>No data here yet.</span>
+    {% endif %}
+</section>
+{% endblock %}

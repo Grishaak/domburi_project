@@ -5,9 +5,9 @@ About Me
 
 
 {% block body %}
-<h1>About me</h1>
+<h1 class="h1-prof">Обо мне</h1>
 
-<div>
+<div class="forms">
     {% if user.is_authenticated %}
     <div>
         <p>Username: {{ user.username }}</p>

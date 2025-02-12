@@ -1,0 +1,23 @@
+{% extends "./base.html" %}
+
+{% block title %}
+
+Categories list
+
+{% endblock %}
+
+{% block body %}
+<section class="h-3">
+    {% if categories %}
+    {% for category in categories %}
+    <div class="content_inner">
+        <p><a href="{% url 'recipes:category_detail' category.pk %}">
+            Название: {{ category.name }}</a></p>
+        <p>Описание: {{ category.description|truncatewords:70 }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <span>No data here yet.</span>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "./base.html" %}
+
+{% block title %}
+
+Detailed recipe.
+
+{% endblock %}
+
+{% block body %}
+<div class="h-detail">
+    {% if recipe %}
+        {% if recipe.categories %}
+        <p>
+            {% for category in recipe.categories.all %}
+            <span class="cats">{{ category.name }}</span>
+            {% endfor %}
+        </p>
+
+        {% if recipe.image %}
+        <img src="{{ recipe.image.url }}" alt="{{ recipe.image.name  }}">
+        {% endif %}
+        {% endif %}
+        <p>Название: {{ recipe.name }}</p>
+        <p>Описание: {{ recipe.description|linebreaks }}</p>
+        <p>Автор: {{ recipe.author }}</p>
+        {% if user.pk == recipe.author.pk or user.is_superuser %}
+        <div>
+            <a href='{% url "recipes:recipe_update" recipe.pk %}'>Редактирование</a>
+        </div>
+        {% endif %}
+        {% else %}
+        <span>No data here yet.</span>
+    {% endif %}
+</div>
+{% endblock %}

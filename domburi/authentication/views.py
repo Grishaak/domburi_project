@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
@@ -33,11 +34,13 @@ class RegisterUser(CreateView):
             username=username,
             password=password,
         )
+        simple_group = Group.objects.get(name='Simple_user')
+        user.groups.add(simple_group)
         login(request=self.request, user=user)
         return response
 
 
-class AboutMeView(TemplateView):
+class AboutMeView(LoginRequiredMixin, TemplateView):
     template_name = "authentication/about_me.html"
 
 
@@ -50,7 +53,7 @@ class ProfileUserView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
     def get_success_url(self):
-        return reverse_lazy('authentication:profile')
+        return reverse_lazy('authentication:about_me')
 
 
 def logout_user(request):

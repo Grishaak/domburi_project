@@ -17,7 +17,7 @@ class RecipeAdmin(admin.ModelAdmin):
             'fields': ('name', 'author', 'description')
         }),
         ('Optional fields', {
-            'fields': ('cooking_steps', 'cooking_time', 'categories'),
+            'fields': ('cooking_steps', 'cooking_time', 'categories', 'image'),
             'classes': ('wide', ),
             'description': 'An optional fields.'
         }),

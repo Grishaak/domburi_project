@@ -5,20 +5,21 @@ Profile User
 
 
 {% block body %}
-<h1>Profile</h1>
+<div>
+    <h1 class="h1-prof">Профиль</h1>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-error">{{ form.non_field_errors }}</div>
-    {% for f in form %}
-    <p><label class="form-label" for="{{ f.id_for_label }}">
-        {{ f.label }}</label>
-        {{ f }}</p>
-    <div class="form-error">{{ f.errors }}</div>
-    {% endfor %}
-    <p>
-        <button type="submit">Сохранить</button>
-    </p>
-</form>
-<hr>
+    <form class="forms" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-error">{{ form.non_field_errors }}</div>
+        {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_label }}">
+            {{ f.label }}</label>
+            {{ f }}</p>
+        <div class="form-error">{{ f.errors }}</div>
+        {% endfor %}
+        <p>
+            <button class="btn_form" type="submit">Сохранить</button>
+        </p>
+    </form>
+</div>
 {% endblock %}

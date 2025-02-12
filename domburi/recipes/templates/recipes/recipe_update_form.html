@@ -1,0 +1,24 @@
+{% extends "./base.html" %}
+
+{% block title %}
+Update recipe
+{% endblock %}
+
+{% block body %}
+<h1 class="h1-prof">Update recipe</h1>
+
+<div>
+    <form class="forms" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button type="submit">
+                Submit
+            </button>
+        </div>
+        <div>
+            <a href='{% url "recipes:recipe_detail" recipe.pk %}'>Вернутся обратно</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

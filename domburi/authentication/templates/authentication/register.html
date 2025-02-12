@@ -1,13 +1,13 @@
 {% extends "recipes/base.html" %}
 {% block title %}
-Profile User
+Register
 {% endblock %}
 
 
 {% block body %}
-<h1>Profile</h1>
+<h1 class="h1-prof" >Регистрация</h1>
 
-<form method="post" enctype="multipart/form-data">
+<form class="forms" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-error">{{ form.non_field_errors }}</div>
     {{ form.as_p }}
@@ -15,5 +15,4 @@ Profile User
         <button type="submit">Сохранить</button>
     </p>
 </form>
-<hr>
 {% endblock %}
