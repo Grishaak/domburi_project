@@ -5,7 +5,37 @@ index
 {% endblock %}
 
 {% block body %}
+<div>
+    <h2 class="h1-prof">Рецепты для вас</h2>
+    <form class="forms" action="{% url 'recipes:recipes_list' %}" method="get">
+        <p><label class="form-label">Поиск: <input name="q" type="text" placeholder="Search..."></p>
+    </form>
+</div>
+<section class="h-3">
 
-<h2>Start django recipes site.</h2>
+    {% if recipes %}
+    {% for recipe in recipes %}
+    <div class="content_inner">
+        {% if recipe.categories %}
+        <p>Категории:
+            {% for cat in recipe.categories.all %}
+            |<a href='{% url "recipes:category_detail" cat.pk %}'><span class="cats">{{ cat.name }}</span></a>|
+            {% endfor %}
+        </p>
 
+        {% endif %}
+        <p><a href="{% url 'recipes:recipe_detail' recipe.pk %}">
+            Название: {{ recipe.name }}</a></p>
+
+        {% if recipe.image %}
+        <img src="{{ recipe.image.url }}" alt="No image here yet.">
+        {% endif %}
+        <p>Описание: {{ recipe.description|truncatewords:70|linebreaks }}</p>
+        <p>Автор: {{ recipe.author }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <span>No data here yet.</span>
+    {% endif %}
+</section>
 {% endblock %}

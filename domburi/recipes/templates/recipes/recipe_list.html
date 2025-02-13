@@ -12,9 +12,9 @@ Recipes list
     {% for recipe in recipes %}
     <div class="content_inner">
         {% if recipe.categories %}
-        <p>
-            {% for category in recipe.categories.all %}
-            <span class="cats">{{ category.name }}</span>
+        <p>Категории:
+            {% for cat in recipe.categories.all %}
+            |<a href='{% url "recipes:category_detail" cat.pk %}'><span class="cats">{{ cat.name }}</span></a>|
             {% endfor %}
         </p>
 
@@ -33,4 +33,21 @@ Recipes list
     <span>No data here yet.</span>
     {% endif %}
 </section>
+<footer>
+    <span class="h-2">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</footer>
 {% endblock %}

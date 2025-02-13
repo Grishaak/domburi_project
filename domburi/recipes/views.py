@@ -1,5 +1,9 @@
+import operator
+from functools import reduce
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
 from django.http import HttpResponse, HttpRequest, request
 from django.shortcuts import render, redirect
 import os
@@ -13,11 +17,12 @@ from recipes.models import Recipe, Category
 
 
 class RecipeGeneralView(ListView):
+    model = Recipe
     queryset = Recipe.objects.select_related('author') \
                    .prefetch_related('categories') \
-                   .order_by('?')[:4]
+                   .all().order_by('?')[:4]
     context_object_name = 'recipes'
-    template_name = 'recipes/recipe_list.html'
+    template_name = 'recipes/recipe_index.html'
 
 
 class RecipeListView(ListView):
@@ -26,6 +31,30 @@ class RecipeListView(ListView):
         .all()
     context_object_name = 'recipes'
     template_name = 'recipes/recipe_list.html'
+    paginate_by = 6
+
+    def get_queryset(self):
+        queries = self.request.GET.get('q')
+        if queries:
+            queries = self.request.GET.get('q').split()
+            qset1 = reduce(operator.__or__,
+                           [Q(name__iregex=rf"{query}") | Q(description__iregex=fr"{query}") | Q(
+                               categories__name__iregex=fr"{query}") for query in queries])
+            object_list = Recipe.objects.select_related('author') \
+                .prefetch_related('categories') \
+                .filter(qset1).distinct()
+            if object_list:
+                return object_list
+            else:
+                object_list = Recipe.objects.select_related('author') \
+                    .prefetch_related('categories') \
+                    .all()
+        else:
+            object_list = Recipe.objects.select_related('author') \
+                .prefetch_related('categories') \
+                .all()
+        print(object_list)
+        return object_list
 
 
 class RecipeDetailView(DetailView):
@@ -106,8 +135,13 @@ class CategoryListView(ListView):
     context_object_name = 'categories'
     template_name = 'recipes/category_list.html'
 
+    paginate_by = 6
+
 
 class CategoryDetailView(DetailView):
+    queryset = Category.objects.prefetch_related('recipes') \
+        .all()
+
     model = Category
     context_object_name = 'category'
     template_name = 'recipes/category_detail.html'
@@ -118,30 +152,3 @@ def user_form(request):
         'form': UserForm(),
     }
     return render(request, template_name='recipes/user_form.html', context=context)
-
-# def user_validate(request: HttpRequest):
-#     if request.user.pk is not None:
-#         return True
-#     return False
-
-
-# def create_recipe(request: HttpRequest):
-#     if request.method == 'POST':
-#         form = RecipeForm(request.POST, request.FILES)
-#         if form.is_valid() and user_validate(request):
-#             data = form.cleaned_data
-#             cats = form.cleaned_data.pop('categories')
-#             data['author_id'] = request.user.pk
-#             instance = Recipe.objects.create(**data)
-#             instance.categories.set(cats)
-#             url_revers = reverse('recipes:recipes_list')
-#             return redirect(url_revers)
-#         # else:
-#         #     url_revers = reverse('recipes:create_recipe')
-#         #     return redirect(url_revers)
-#     else:
-#         form = RecipeForm()
-#     context = {
-#         'form': form
-#     }
-#     return render(request, template_name='recipes/recipe_create.html', context=context)

@@ -16,8 +16,8 @@ class Recipe(models.Model):
                                      MaxValueValidator(100),
                                      MinValueValidator(1)
                                  ]
-    )
-    cooking_time = IntegerField(default=5, validators = [
+                                 )
+    cooking_time = IntegerField(default=5, validators=[
         MaxValueValidator(1440),
         MinValueValidator(5)
     ])
@@ -32,9 +32,14 @@ class Recipe(models.Model):
         return f'Рецепт: {self.name}.'
 
 
+def destination_of_preview(instance: "Category", filename: str) -> str:
+    return "".join(f"recipes/category_{instance.pk}/image/{filename}")
+
+
 class Category(models.Model):
     name = CharField(null=False, max_length=30)
-    description = TextField(max_length=200, null=False, blank=True)
+    description = TextField(max_length=700, null=False, blank=True)
+    image = ImageField(null=True, blank=True, upload_to=destination_of_preview)
 
     def __str__(self):
         return f'Категория: {self.name}.'

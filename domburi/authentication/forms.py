@@ -20,7 +20,8 @@ class LoginUserForm(AuthenticationForm):
 
 class ProfileUserForm(forms.ModelForm):
     username = forms.CharField(label="Логин", disabled=True,
-                               widget=forms.TextInput(attrs={'class': 'form-input'}))
+                               widget=forms.TextInput(
+                                   attrs={'class': 'form-input'}))
     email = forms.CharField(disabled=True,
                             widget=forms.TextInput(attrs={'class': 'form-input'}))
 
@@ -40,16 +41,33 @@ class ProfileUserForm(forms.ModelForm):
 
 
 class RegisterUserForm(UserCreationForm):
-    username = forms.CharField(max_length=100, label='Логин',
-                               widget=forms.TextInput(attrs={'class': 'form-input'}))
-    password1 = forms.CharField(label='Пароль',
-                                widget=forms.PasswordInput(attrs={'class': 'form-input'}))
-    password2 = forms.CharField(label='Повтор пароля',
-                                widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+    username = forms.CharField(max_length=100, label='Логин')
+    password1 = forms.CharField(label='Пароль')
+    password2 = forms.CharField(label='Повтор пароля')
 
     class Meta:
         model = get_user_model()
         fields = ('username', 'password1', 'password2', 'email')
         labels = {
             'email': 'E-mail',
+        }
+        widgets = {
+            'username': forms.TextInput(
+                attrs={
+                    'class': 'form-input',
+                    'placeholder': 'Введите свой логин'
+                }
+            ),
+            'password1': forms.PasswordInput(
+                attrs={
+                    'class': 'form-input',
+                    'placeholder': 'Введите пароль'
+                }
+            ),
+            'password2': forms.PasswordInput(
+                attrs={
+                    'class': 'form-input',
+                    'placeholder': 'Повтворите пароль'
+                }
+            ),
         }

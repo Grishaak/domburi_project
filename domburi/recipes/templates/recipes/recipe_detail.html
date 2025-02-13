@@ -10,9 +10,9 @@ Detailed recipe.
 <div class="h-detail">
     {% if recipe %}
         {% if recipe.categories %}
-        <p>
-            {% for category in recipe.categories.all %}
-            <span class="cats">{{ category.name }}</span>
+        <p>Категории:
+            {% for cat in recipe.categories.all %}
+            |<a href='{% url "recipes:category_detail" cat.pk %}'><span class="cats">{{ cat.name }}</span></a>|
             {% endfor %}
         </p>
 

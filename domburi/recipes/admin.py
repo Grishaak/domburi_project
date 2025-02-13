@@ -18,7 +18,7 @@ class RecipeAdmin(admin.ModelAdmin):
         }),
         ('Optional fields', {
             'fields': ('cooking_steps', 'cooking_time', 'categories', 'image'),
-            'classes': ('wide', ),
+            'classes': ('wide',),
             'description': 'An optional fields.'
         }),
     ]
@@ -47,8 +47,14 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'description_short', 'image')
     ordering = 'pk',
+    search_fields = 'pk', 'name', 'description_short'
+
+    def description_short(self, obj):
+        if len(obj.description) > 50:
+            return obj.description[:50] + '...'
+        return obj.description
 
 
 admin.site.register(Recipe, RecipeAdmin)

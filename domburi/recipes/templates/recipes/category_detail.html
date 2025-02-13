@@ -9,10 +9,36 @@ Detailed recipe.
 {% block body %}
 <div class="cat-detail">
     {% if category %}
-        <p>Название: {{ category.name }}</p>
-        <p>Описание: {{ category.description }}</p>
-        {% else %}
-        <span>No data here yet.</span>
+    <p>{{ category.name }}</p>
+    {% if category.image %}
+    <img src="{{ category.image.url }}" alt="No image here yet.">
+    {% endif %}
+    <p>Описание: {{ category.description }}</p>
+    {% else %}
+    <span>No data here yet.</span>
     {% endif %}
 </div>
+<section class="h-3">
+    {% if category.recipes %}
+    {% for recipe in category.recipes.all %}
+    <div class="content_inner">
+        <p>Категории:
+            {% for cat in recipe.categories.all %}
+            |<a href='{% url "recipes:category_detail" cat.pk %}'><span class="cats">{{ cat.name }}</span></a>|
+            {% endfor %}
+        </p>
+        <p><a href="{% url 'recipes:recipe_detail' recipe.pk %}">
+            {{ recipe.name }}</a></p>
+
+        {% if recipe.image %}
+        <img src="{{ recipe.image.url }}" alt="No image here yet.">
+        {% endif %}
+        <p>Описание: {{ recipe.description|truncatewords:70|linebreaks }}</p>
+        <p>Автор: {{ recipe.author }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No data here yet.</p>
+    {% endif %}
+</section>
 {% endblock %}

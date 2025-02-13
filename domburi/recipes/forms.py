@@ -2,9 +2,9 @@ from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import TextField
 from django.forms import forms, CharField, EmailField, IntegerField, Textarea, FileField, MultipleChoiceField, \
-    CheckboxSelectMultiple, ImageField, ModelForm
+    CheckboxSelectMultiple, ImageField, ModelForm, TextInput
 from .models import Recipe
-
+import django.forms.widgets as wgs
 from recipes.models import Category
 
 
@@ -38,3 +38,33 @@ class RecipeForm(ModelForm):
     class Meta:
         model = Recipe
         fields = ['name', 'description', 'cooking_steps', 'cooking_time', 'image', 'categories']
+
+        widgets = {
+            'name': TextInput(
+                attrs={
+                    'class': 'form-input',
+                    'placeholder': 'Введите свое имя',
+                }
+            ),
+            'description': Textarea(
+                attrs={
+                    'class': 'form-input',
+                    'placeholder': 'Введите сюда ваше описание',
+                }
+            ),
+            'cooking_steps': wgs.NumberInput(
+                attrs={
+                    'class': 'form-input'
+                }
+            ),
+            'cooking_time': wgs.NumberInput(
+                attrs={
+                    'class': 'form-input'
+                }
+            ),
+            'image': wgs.FileInput(
+                attrs={
+                    'class': 'form-input'
+                }
+            ),
+        }

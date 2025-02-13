@@ -12,12 +12,34 @@ Categories list
     {% for category in categories %}
     <div class="content_inner">
         <p><a href="{% url 'recipes:category_detail' category.pk %}">
-            Название: {{ category.name }}</a></p>
-        <p>Описание: {{ category.description|truncatewords:70 }}</p>
+            {{ category.name }}</a></p>
+        {% if category.image %}
+        <a href="{% url 'recipes:category_detail' category.pk %}">
+            <img src="{{ category.image.url }}" alt="No image here yet."></a>
+        {% endif %}
+        <p>Описание: {{ category.description|truncatewords:50 }}</p>
+
     </div>
     {% endfor %}
     {% else %}
     <span>No data here yet.</span>
     {% endif %}
 </section>
+<footer>
+    <span class="h-2">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</footer>
 {% endblock %}
