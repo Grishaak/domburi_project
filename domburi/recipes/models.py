@@ -9,8 +9,8 @@ def destination_of_image(instance: "Recipe", filename: str) -> str:
 
 
 class Recipe(models.Model):
-    name = CharField(max_length=40, null=False)
-    description = TextField(max_length=2000, null=False, blank=True)
+    name = CharField(max_length=40, null=False, db_index=True, )
+    description = TextField(max_length=2000, null=False, blank=True, db_index=True, )
     cooking_steps = IntegerField(default=1,
                                  validators=[
                                      MaxValueValidator(100),

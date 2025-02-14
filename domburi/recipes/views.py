@@ -1,19 +1,61 @@
+import logging
 import operator
 from functools import reduce
+from pprint import pprint
 
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
-from django.http import HttpResponse, HttpRequest, request
-from django.shortcuts import render, redirect
-import os
+from django.http import HttpRequest
+from django.shortcuts import render
 
 from django.urls import reverse, reverse_lazy
-from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, FormView, UpdateView
+from django.views.generic import ListView, DetailView, FormView, UpdateView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.generics import RetrieveUpdateAPIView, ListCreateAPIView, RetrieveDestroyAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
 from recipes.forms import UserForm, RecipeForm
-from recipes.models import Recipe, Category
+from recipes.models import Category
+
+from rest_framework.viewsets import ModelViewSet
+
+from recipes.permissions import IsAdminOrAuthorOrReadOnly
+from recipes.serializers import RecipeApiSerializer
+from recipes.models import Recipe
+
+logger = logging.getLogger(__name__)
+
+
+class RecipesApiRetrieveView(ListCreateAPIView):
+    """
+    Все сущности модели рецептов.
+    Показывает все аттрибуты модели рецептов через список.
+    """
+
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeApiSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    filterset_fields = [
+        'name', 'description', 'cooking_steps', 'cooking_time',
+    ]
+    filter_backends = [
+        SearchFilter, DjangoFilterBackend, OrderingFilter
+    ]
+    search_fields = ['name', 'description']
+
+
+class RecipesApiUpdateView(RetrieveUpdateAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeApiSerializer
+    permission_classes = (IsAdminOrAuthorOrReadOnly,)
+
+
+class RecipesApiDestroyView(RetrieveDestroyAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeApiSerializer
+    permission_classes = (IsAdminOrAuthorOrReadOnly,)
 
 
 class RecipeGeneralView(ListView):
@@ -32,6 +74,8 @@ class RecipeListView(ListView):
     context_object_name = 'recipes'
     template_name = 'recipes/recipe_list.html'
     paginate_by = 6
+    logger.debug('An entity "RecipeListView" has been executed DEBUG mode.')
+    logger.info('An entity "RecipeListView" has been executed INFO mode.')
 
     def get_queryset(self):
         queries = self.request.GET.get('q')
@@ -53,7 +97,6 @@ class RecipeListView(ListView):
             object_list = Recipe.objects.select_related('author') \
                 .prefetch_related('categories') \
                 .all()
-        print(object_list)
         return object_list
 
 
@@ -139,12 +182,16 @@ class CategoryListView(ListView):
 
 
 class CategoryDetailView(DetailView):
-    queryset = Category.objects.prefetch_related('recipes') \
-        .all()
-
     model = Category
-    context_object_name = 'category'
     template_name = 'recipes/category_detail.html'
+
+    def get_context_data(self, **kwargs):
+        key = self.kwargs.get('pk')
+        context = super().get_context_data(**kwargs)
+
+        context['recipes'] = Recipe.objects.filter(categories__pk=key).select_related('author').prefetch_related(
+            'categories')
+        return context
 
 
 def user_form(request):

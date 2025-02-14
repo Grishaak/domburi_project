@@ -19,11 +19,11 @@ Detailed recipe.
     {% endif %}
 </div>
 <section class="h-3">
-    {% if category.recipes %}
-    {% for recipe in category.recipes.all %}
+    {% if recipes %}
+    {% for recipe in recipes %}
     <div class="content_inner">
         <p>Категории:
-            {% for cat in recipe.categories.all %}
+            {% for cat in recipes.categories %}
             |<a href='{% url "recipes:category_detail" cat.pk %}'><span class="cats">{{ cat.name }}</span></a>|
             {% endfor %}
         </p>
