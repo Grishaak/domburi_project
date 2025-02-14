@@ -11,4 +11,4 @@ RUN pip install -r requirements.txt
 
 COPY domburi .
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+CMD ["gunicorn", "domburi.wsgi:application", "--bind", "0.0.0.0:8000"]

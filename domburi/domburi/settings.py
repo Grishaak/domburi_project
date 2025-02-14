@@ -9,34 +9,44 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import logging.config
+from os import getenv
 from pathlib import Path
 
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+DATABASE_DIR = BASE_DIR / 'database'
+DATABASE_DIR.mkdir(exist_ok=True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k8+48&01ug9ph!txk%o_$*m*_n#h&*cpn@o_qg1&w)g896m!iz'
+SECRET_KEY = getenv(
+    "DJANGO_SECRET_KEY",
+    'django-insecure-k8+48&01ug9ph!txk%o_$*m*_n#h&*cpn@o_qg1&w)g896m!iz'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv(
+    "DJANGO_DEBUG", "0"
+) == "1"
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
     '0.0.0.0',
 
-]
+] + getenv("DJANGO_ALLOWED_HOSTS", "").split(',')
+
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
 if DEBUG:
     import socket
+
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS.append("10.0.2.2")
     INTERNAL_IPS.extend(
@@ -64,6 +74,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django.middleware.cache.UpdateCacheMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,6 +85,8 @@ MIDDLEWARE = [
     'django.contrib.admindocs.middleware.XViewMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "django.middleware.cache.FetchFromCacheMiddleware",
+
 ]
 
 ROOT_URLCONF = 'domburi.urls'
@@ -102,9 +115,17 @@ WSGI_APPLICATION = 'domburi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': DATABASE_DIR / 'db.sqlite3',
     }
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "./temp/django_cache",
+    }
+}
+CACHE_MIDDLEWARE_SECONDS = 250
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -201,3 +222,25 @@ LOGGING = {
     #     'level': 'INFO',
     # }
 }
+LOGLEVEL = getenv("DJANGO_LOGLEVEL", "info").upper()
+logging.config.dictConfig({
+    "version": 1,
+    "disabled_existing_loggers": False,
+    "formatters": {
+        "console": {
+            "format": "%(asctime)s %(levelname)s [%(name)s:%(linenumber)s] %(module)s %(message)s "
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "console"
+        },
+    },
+    "loggers": {
+        "level": LOGLEVEL,
+        "handlers": [
+            "console",
+        ],
+    },
+})
