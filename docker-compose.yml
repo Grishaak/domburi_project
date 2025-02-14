@@ -1,12 +1,13 @@
 version: "3.9"
+
 services:
   app_domburi:
     build:
       dockerfile: ./Dockerfile
     command:
-      - "gunicorn",
-      - "domburi.wsgi:application",
-      - "--bind",
+      - gunicorn
+      - domburi.wsgi:application
+      - --bind
       - "0.0.0.0:8000"
     ports:
       - "8000:8000"
